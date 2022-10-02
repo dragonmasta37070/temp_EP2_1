@@ -86,8 +86,10 @@ public class TriTree implements Iterable<Integer>{
 class TriTreeIterator implements Iterator<Integer>{
 
     private TriTree tree;
+    private int state;
     private boolean retrived;
     Iterator<Integer> current;
+
 
     public TriTreeIterator(TriTree tree) {
         this.tree = tree;
@@ -95,10 +97,13 @@ class TriTreeIterator implements Iterator<Integer>{
 
         if(tree.getLeft() != null){
             current = tree.getLeft().iterator();
+            state = 1;
         } else if(tree.getMiddle() != null){
             current = tree.getMiddle().iterator();
+            state = 2;
         } else if (tree.getRight() != null){
             current = tree.getRight().iterator();
+            state = 3;
         }
     }
 
@@ -108,22 +113,28 @@ class TriTreeIterator implements Iterator<Integer>{
             throw new NoSuchElementException("ois weg");
         }
 
-        Integer temp = null;
-        if (current != null && current.hasNext())
-             temp = current.next();
-        else{
+        Integer temp;
+        if (current != null) {
+            temp = current.next();// hir wird das left reingeladen, wenns das nicht gibt dann middle oder rigth
+
+            if(!current.hasNext()) {
+                //das left wurde sicher schon einmal reingezogen
+                if (tree.getMiddle() != null && state < 2) {
+                    current = tree.getMiddle().iterator();
+                    state = 2;
+                } else if (tree.getRight() != null && state < 3) {
+                    current = tree.getRight().iterator();
+                    state = 3;
+                } else {
+                    current = null;
+
+                }
+            }
+        } else {
             temp = tree.getValue();
             retrived = true;
         }
-        if(tree.getLeft() != null){
-            current = tree.getLeft().iterator();
-        } else if(tree.getMiddle() != null){
-            current = tree.getMiddle().iterator();
-        } else if (tree.getRight() != null){
-            current = tree.getRight().iterator();
-        }
 
-        retrived = true;
         return temp;
     }
 
