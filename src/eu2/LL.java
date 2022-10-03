@@ -2,6 +2,7 @@ package eu2;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.SplittableRandom;
 
 class Test{
     public static void main(String[]args){
@@ -31,7 +32,9 @@ public class LL implements Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return new LLIterator(this);
+        if (next != null)
+            return new LLIterator(next.iterator(),Wort);
+        return new LLIterator(null, Wort);
     }
 
     public String getWort() {
@@ -53,33 +56,70 @@ public class LL implements Iterable<String> {
 
 class LLIterator implements Iterator<String> {
 
-    private LL current;
-    private boolean isLast;
+//    private LL current;
+//    private boolean isLast;
+//
+//    public LLIterator(LL current) {
+//        this.current = current;
+//        if(current.getNext() == null)
+//            isLast = true;
+//        else
+//            isLast = false;
+//    }
+//
+//    @Override
+//    public String next() {
+//        if (!hasNext())
+//            throw new NoSuchElementException("leer euda");
+//
+//        String temp = current.getWort();
+//        if(current.getNext() != null)
+//            current = current.getNext();
+//        else
+//            isLast = true;
+//
+//        return temp;
+//    }
+//
+//    @Override
+//    public boolean hasNext() {
+//        return !isLast;
+//    }
 
-    public LLIterator(LL current) {
+private Iterator<String> current;
+private String value;
+private boolean isRetreved;
+
+    public LLIterator(Iterator<String> current, String value) {
         this.current = current;
-        if(current.getNext() == null)
-            isLast = true;
-        else
-            isLast = false;
+        this.value = value;
+        isRetreved = false;
     }
+
+//    public LLIterator(String value) {
+//        this.value = value;
+//    }
 
     @Override
     public String next() {
-        if (!hasNext())
-            throw new NoSuchElementException("leer euda");
+        if(!hasNext())
+            throw new NoSuchElementException("asd");
 
-        String temp = current.getWort();
-        if(current.getNext() != null)
-            current = current.getNext();
-        else
-            isLast = true;
+        if (!isRetreved){
+            isRetreved = true;
+            return value;
+        }
+
+        String temp = current.next();
+        if(!current.hasNext()){
+            current = null;
+        }
 
         return temp;
     }
 
     @Override
     public boolean hasNext() {
-        return !isLast;
+        return current != null || !isRetreved;
     }
 }
