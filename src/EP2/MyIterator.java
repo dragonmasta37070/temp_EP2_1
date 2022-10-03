@@ -4,13 +4,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class MyIterator implements BasicOperatorIterator {
-    BasicOperator value;
-    Iterator<BasicOperator> current;
-    boolean isRetrived;
+    Iterator<BasicOperator> rigth;
+    Iterator<BasicOperator> left;
 
-    public MyIterator(BasicOperator value, Iterator<BasicOperator> current) {
-        this.value = value;
-        this.current = current;
+    public MyIterator(Iterator<BasicOperator> left, Iterator<BasicOperator> rigth) {
+        this.left = left;
+        this.rigth = rigth;
     }
 
     @Override
@@ -18,25 +17,15 @@ public class MyIterator implements BasicOperatorIterator {
         if (!hasNext()){
             throw new NoSuchElementException("BLA");
         }
-        BasicOperator temp;
 
-        if(!isRetrived) {
-            isRetrived = true;
-            return value;
-        }
-
-        temp = current.next();
-        if(!current.hasNext()){
-            current = null;
-        }
-
-
-
-        return temp;
+        if(left.hasNext())
+            return left.next();
+        else
+            return rigth.next();
     }
 
     @Override
     public boolean hasNext() {
-        return current != null || !isRetrived;
+        return left.hasNext() || rigth.hasNext();
     }
 }

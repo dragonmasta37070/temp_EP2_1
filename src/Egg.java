@@ -8,4 +8,9 @@ public class Egg implements Ingredient {
     public String getName() {
         return "Egg";
     }
+
+    @Override
+    public String toString() {
+        return "Egg";
+    }
 }

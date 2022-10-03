@@ -47,10 +47,17 @@ public class ComplexRecipe implements Recipe // implements Recipe
     // (See also examples in 'PraxisTest2.java'.)
     //
     public String toString() {
-        String out = "";
+        String out = "[";
+        boolean first = true;
 
-        // TODO: implement method.
-        return "";
+        for (Recipe i : recipes) {
+            if (!first)
+                out += ", ";
+            out += i.toString();
+            first = false;
+        }
+        out += "]";
+        return out;
     }
 
     // 'equals' and 'hashCode' need not be overridden in this class.

@@ -12,42 +12,35 @@ import java.util.Objects;
 //
 public class ComposedOperator implements StringOperator {
 
-    private BasicOperator jetzt;
-    private StringOperator folgender;
+    private StringOperator left;
+    private StringOperator rigth;
 
-    public ComposedOperator(BasicOperator jetzt) {
-        this.jetzt = jetzt;
-        folgender = null;
+    public ComposedOperator(StringOperator jetzt, StringOperator folgender) {
+        this.left = jetzt;
+        this.rigth = folgender;
     }
 
     // Returns an iterator over all basic operators which
     // this operator is composed of.
     // See examples in 'PraxisTest2.java'.
     public BasicOperatorIterator iterator() {
-        return new MyIterator(jetzt, folgender.iterator());
+        return new MyIterator(left.iterator(), rigth.iterator());
     }
 
     @Override
     public String apply(String operand) {
-        String out = operand;
-        for (BasicOperator b : this) {
-            b.apply(out);
-        }
-        return out;
+
+        return rigth.apply(left.apply(operand));
     }
 
     @Override
     public StringOperator andThen(StringOperator after) {
-        if (folgender != null)
-            folgender.andThen(after);
-        else
-            folgender = new ComposedOperator((BasicOperator) after);
-        return this;
+        return new ComposedOperator(this, after);
     }
 
     @Override
     public String toString() {
-        return jetzt.toString() + " and Then " + folgender.toString();
+        return left.toString() + " and Then " + rigth.toString();
     }
 
     @Override
@@ -68,6 +61,6 @@ public class ComposedOperator implements StringOperator {
 
     @Override
     public int hashCode() {
-        return Objects.hash(jetzt, folgender);
+        return Objects.hash(left, rigth);
     }
 }

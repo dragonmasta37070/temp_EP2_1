@@ -19,7 +19,7 @@ public class ReplaceOperator implements BasicOperator {
 
     @Override
     public BasicOperatorIterator iterator() {
-        return new MyIterator(this, null);
+        return new BlaIterator(this);
     }
 
     @Override
@@ -29,8 +29,7 @@ public class ReplaceOperator implements BasicOperator {
 
     @Override
     public StringOperator andThen(StringOperator after) {
-        ComposedOperator t = new ComposedOperator(this);
-        return t.andThen(after);
+        return new ComposedOperator(this, after);
     }
 
     @Override

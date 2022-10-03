@@ -8,4 +8,9 @@ public class Milk implements Ingredient {
     public String getName() {
         return "Milk";
     }
+
+    @Override
+    public String toString() {
+        return "Milk";
+    }
 }

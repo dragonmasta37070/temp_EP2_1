@@ -8,4 +8,9 @@ public class Flour implements Ingredient {
     public String getName() {
         return "Flour";
     }
+
+    @Override
+    public String toString() {
+        return "Flour";
+    }
 }
